@@ -1,0 +1,121 @@
+---
+# Three Tier Application Playbook
+- name: Configuring a new Three Tier Application
+  hosts: apic1
+  connection: local
+  gather_facts: false
+  
+  module_defaults:
+    group/cisco.aci.all:
+      hostname: "{{ inventory_hostname }}"
+      username: "{{ username }}"
+      password: "{{ password }}"
+      validate_certs: false
+
+  vars_files:
+    - ./host_vars/vars.yml
+
+  tasks:
+  - name: Create Ansible Tenant
+    cisco.aci.aci_tenant:
+      tenant: "{{ item.tenant_name }}"
+      description: "{{ item.tenant_description }}"
+      state: present
+    loop: "{{ tenants_dictionary }}"
+
+  - name: Add a new VRF to a tenant
+    cisco.aci.aci_vrf:
+      tenant: "{{ item.tenant_name }}"
+      vrf: "{{ item.vrf_name }}"
+      descr: "{{ item.vrf_description }}"
+      state: present
+    loop: "{{ vrfs_dictionary }}"
+
+  - name: Add a new AP
+    cisco.aci.aci_ap:
+      tenant: "{{ item.0.tenant_name }}"
+      ap: "{{ item.1.application_profile_name }}"
+      description: "{{ item.1.application_profile_description }}"
+      state: present
+    loop: "{{ tenants_dictionary | subelements('aps')}}"
+
+
+  - name: Create a filter entry
+    cisco.aci.aci_filter_entry:
+      entry: permit_ip_any
+      filter: permit_ip_any
+      tenant: "{{ item.tenant_name }}"
+      ether_type: ip
+      state: present
+    loop: "{{ tenants_dictionary }}"
+
+  - name: Add a new filter to a tenant
+    cisco.aci.aci_filter:
+      filter: permit_ip_any
+      description: permit_ip_any
+      tenant: "{{ item.tenant_name }}"
+      state: present
+    loop: "{{ tenants_dictionary }}"
+
+  - name: Add a new contract
+    cisco.aci.aci_contract:
+      tenant: "{{ item.tenant_name }}"
+      contract: "{{ item.contract_name }}"
+      description: "{{ item.contract_description }}"
+      state: present
+    loop: "{{ contracts_dictionary }}"
+    
+  - name: Add a new contract subject
+    cisco.aci.aci_contract_subject:
+      tenant: "{{ item.tenant_name }}"
+      contract: "{{ item.contract_name }}"
+      subject: main_subject
+      description: main_subject
+      reverse_filter: false
+      state: present
+    loop: "{{ contracts_dictionary }}"
+
+
+
+# - name: Create a match rule destination
+#   cisco.aci.aci_match_rule_destination:
+#     host: apic
+#     username: admin
+#     password: SomeSecretPassword
+#     match_rule: prod_match_rule
+#     tenant: production
+#     ip: 11.11.11.11/24
+#     aggregate: "yes"
+#     from_prefix_length: 0
+#     to_prefix_length: 32
+#     state: present
+#   delegate_to: localhost
+
+# - name: Create a route context policy
+#   cisco.aci.aci_route_control_context:
+#     host: apic
+#     username: admin
+#     password: SomeSecretPassword
+#     route_control_context: prod_route_control_context
+#     route_control_profile: prod_route_control_profile
+#     tenant: production
+#     l3out: prod_l3out
+#     action: permit
+#     order: 0
+#     action_rule: prod_action_rule_profile
+#     match_rule: prod_match_rule
+#     state: present
+#   delegate_to: localhost
+
+# - name: Create a route control profile
+#   cisco.aci.aci_route_control_profile:
+#     host: apic
+#     username: admin
+#     password: SomeSecretPassword
+#     route_control_profile: prod_route_control_profile
+#     tenant: production
+#     l3out: prod_l3out
+#     auto_continue: "no"
+#     policy_type: combinable
+#     state: present
+#   delegate_to: localhost

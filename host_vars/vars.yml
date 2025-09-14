@@ -1,0 +1,66 @@
+---
+
+tenants_dictionary:
+  - tenant_name: tn_main
+    tenant_description: Main Tenant
+    aps:
+      - application_profile_name: ap_default
+        application_profile_description: ap_default
+  - tenant_name: tn_dev
+    tenant_description: Development Tenant
+    aps:
+      - application_profile_name: ap_default
+        application_profile_description: ap_default
+
+vrfs_dictionary:
+  - vrf_name: vrf_transit
+    tenant_name: tn_dev
+    vrf_description: Transit VRF
+  - vrf_name: vrf_acn-local
+    tenant_name: tn_main
+    vrf_description: O&M VRF (extended from Transit)
+
+
+bds_dictionary:
+  - bd_name: bd_m1_0001
+    bd_description: Bridge Domain for Transit VRF
+    tenant_name: tn_main
+    vrf_name: vrf_acn-local
+    ips:
+      - gateway: 1.1.1.1
+        mask: 24
+      - gateway: 1.1.1.2
+        mask: 24        
+      - gateway: 1.1.1.3
+        mask: 24  
+  - bd_name: bd_m1_0002
+    bd_description: Bridge Domain for Transit VRF
+    tenant_name: tn_main
+    vrf_name: vrf_acn-local
+    ips:
+      - gateway: 1.1.2.1
+        mask: 24
+      - gateway: 1.1.2.2
+        mask: 24        
+      - gateway: 1.1.2.3
+        mask: 24 
+
+epgs_dictionary:
+  - epg_name: epg_m1_0001
+    epg_description: Web EPG
+    tenant_name: tn_main
+    application_profile_name: ap_default
+    bd_name: bd_m1_0001
+  - epg_name: epg_m1_0002
+    epg_description: Web EPG
+    tenant_name: tn_main
+    application_profile_name: ap_default
+    bd_name: bd_m1_0002
+
+contracts_dictionary:
+  - contract_name: ctr_epg_m1_0001-to-ctr_epg_m1_0002
+    contract_description: Web EPG
+    tenant_name: tn_main
+  - contract_name: ctr_epg_m2_0001-to-ctr_epg_m1_0002
+    contract_description: Web EPG
+    tenant_name: tn_main
