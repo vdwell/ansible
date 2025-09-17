@@ -1,23 +1,15 @@
 ---
 
 tenants_dictionary:
-  - tenant_name: tn_main
+  - tenant_name: tn_main_test
     tenant_description: Main Tenant
-    aps:
-      - application_profile_name: ap_default
-        application_profile_description: ap_default
-  - tenant_name: tn_dev
-    tenant_description: Development Tenant
     aps:
       - application_profile_name: ap_default
         application_profile_description: ap_default
 
 vrfs_dictionary:
-  - vrf_name: vrf_transit
-    tenant_name: tn_dev
-    vrf_description: Transit VRF
   - vrf_name: vrf_acn-local
-    tenant_name: tn_main
+    tenant_name: tn_main_test
     vrf_description: O&M VRF (extended from Transit)
 
 
@@ -34,8 +26,8 @@ bds_dictionary:
       - gateway: 1.1.1.3
         mask: 24  
   - bd_name: bd_m1_0002
-    bd_description: Bridge Domain for Transit VRF
-    tenant_name: tn_main
+    bd_description: bd_m1_0002
+    tenant_name: tn_main_test
     vrf_name: vrf_acn-local
     ips:
       - gateway: 1.1.2.1
@@ -47,20 +39,78 @@ bds_dictionary:
 
 epgs_dictionary:
   - epg_name: epg_m1_0001
-    epg_description: Web EPG
-    tenant_name: tn_main
+    epg_description: epg_m1_0001
+    tenant_name: tn_main_test
     application_profile_name: ap_default
     bd_name: bd_m1_0001
   - epg_name: epg_m1_0002
-    epg_description: Web EPG
-    tenant_name: tn_main
+    epg_description: epg_m1_0002
+    tenant_name: tn_main_test
     application_profile_name: ap_default
     bd_name: bd_m1_0002
 
 contracts_dictionary:
   - contract_name: ctr_epg_m1_0001-to-ctr_epg_m1_0002
     contract_description: Web EPG
-    tenant_name: tn_main
+    tenant_name: tn_main_test
   - contract_name: ctr_epg_m2_0001-to-ctr_epg_m1_0002
     contract_description: Web EPG
-    tenant_name: tn_main
+    tenant_name: tn_main_test
+
+l4l7_device_dictionary:
+  - device_name: l4l7_slr-tr0004_fwfg004_fwfg005
+    tenant_name: tn_main_test
+    service_type: fw
+    device_type: physical
+    domain: phys
+    context_aware: single
+
+l4l7_concrete_device_dictionary:
+  - device_name: l4l7_slr-tr0004_fwfg004_fwfg005
+    tenant_name: tn_main_test
+    concrete_device_name: nlsrk03_fwfg004-fwacnpv001
+  - device_name: l4l7_slr-tr0004_fwfg004_fwfg005
+    tenant_name: tn_main_test
+    concrete_device_name: nlsrk03_fwfg005-fwacnpv001
+
+l4l7_concrete_device_interfaces_dictionary:
+  - concrete_interface_name: nlsrk03fg004-lag1.1609
+    tenant_name: tn_main_test
+    device_name: l4l7_slr-tr0004_fwfg004_fwfg005
+    concrete_device_name: nlsrk03_fwfg004-fwacnpv001
+    concrete_interface_pod_id: 1
+    concrete_interface_node_id: 101-102
+    concrete_interface_id: SnV_FI-1A
+  - concrete_interface_name: nlsrk03fg005-lag1.1609
+    tenant_name: tn_main_test
+    device_name: l4l7_slr-tr0004_fwfg004_fwfg005
+    concrete_device_name: nlsrk03_fwfg005-fwacnpv001
+    concrete_interface_pod_id: 1
+    concrete_interface_node_id: 101-102
+    concrete_interface_id: SnV_FI-1A
+
+l4l7_device_logical_interfaces_dictionary:
+  - logical_interface_name: fwint_acn-local
+    tenant_name: tn_main_test
+    device_name: l4l7_slr-tr0004_fwfg004_fwfg005
+    logical_interface_encap: vlan-1602
+
+l4l7_device_concrete_logical_interface_attachment_dictionary:
+  - concrete_interface_name: nlsrk03fg004-lag1.1609
+    tenant_name: tn_main_test
+    device_name: l4l7_slr-tr0004_fwfg004_fwfg005
+    concrete_device_name: nlsrk03_fwfg004-fwacnpv001
+    logical_interface_name: fwint_acn-local
+  - concrete_interface_name: nlsrk03fg005-lag1.1609
+    tenant_name: tn_main_test
+    device_name: l4l7_slr-tr0004_fwfg004_fwfg005
+    concrete_device_name: nlsrk03_fwfg005-fwacnpv001
+    logical_interface_name: fwint_acn-local    
+
+
+# l4l7_service_graph_template_dictionary:
+#   - service_graph_template_name: sg_nlein01-fwacnpv001_acn-local
+#     tenant_name: tn_main_test
+    # service_graph_template_description: abc
+
+

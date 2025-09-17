@@ -16,64 +16,64 @@
     - ./host_vars/vars.yml
 
   tasks:
-  - name: Create Ansible Tenant
-    cisco.aci.aci_tenant:
-      tenant: "{{ item.tenant_name }}"
-      description: "{{ item.tenant_description }}"
-      state: present
-    loop: "{{ tenants_dictionary }}"
+  # - name: Create Ansible Tenant
+  #   cisco.aci.aci_tenant:
+  #     tenant: "{{ item.tenant_name }}"
+  #     description: "{{ item.tenant_description }}"
+  #     state: present
+  #   loop: "{{ tenants_dictionary }}"
 
-  - name: Add a new VRF to a tenant
-    cisco.aci.aci_vrf:
-      tenant: "{{ item.tenant_name }}"
-      vrf: "{{ item.vrf_name }}"
-      descr: "{{ item.vrf_description }}"
-      state: present
-    loop: "{{ vrfs_dictionary }}"
+  # - name: Add a new VRF to a tenant
+  #   cisco.aci.aci_vrf:
+  #     tenant: "{{ item.tenant_name }}"
+  #     vrf: "{{ item.vrf_name }}"
+  #     descr: "{{ item.vrf_description }}"
+  #     state: present
+  #   loop: "{{ vrfs_dictionary }}"
 
-  - name: Add a new AP
-    cisco.aci.aci_ap:
-      tenant: "{{ item.0.tenant_name }}"
-      ap: "{{ item.1.application_profile_name }}"
-      description: "{{ item.1.application_profile_description }}"
-      state: present
-    loop: "{{ tenants_dictionary | subelements('aps')}}"
+  # - name: Add a new AP
+  #   cisco.aci.aci_ap:
+  #     tenant: "{{ item.0.tenant_name }}"
+  #     ap: "{{ item.1.application_profile_name }}"
+  #     description: "{{ item.1.application_profile_description }}"
+  #     state: present
+  #   loop: "{{ tenants_dictionary | subelements('aps')}}"
 
 
-  - name: Create a filter entry
-    cisco.aci.aci_filter_entry:
-      entry: permit_ip_any
-      filter: permit_ip_any
-      tenant: "{{ item.tenant_name }}"
-      ether_type: ip
-      state: present
-    loop: "{{ tenants_dictionary }}"
+  # - name: Add a new filter to a tenant
+  #   cisco.aci.aci_filter:
+  #     filter: permit_ip_any
+  #     description: permit_ip_any
+  #     tenant: "{{ item.tenant_name }}"
+  #     state: present
+  #   loop: "{{ tenants_dictionary }}"
 
-  - name: Add a new filter to a tenant
-    cisco.aci.aci_filter:
-      filter: permit_ip_any
-      description: permit_ip_any
-      tenant: "{{ item.tenant_name }}"
-      state: present
-    loop: "{{ tenants_dictionary }}"
+  # - name: Create a filter entry
+  #   cisco.aci.aci_filter_entry:
+  #     entry: permit_ip_any
+  #     filter: permit_ip_any
+  #     tenant: "{{ item.tenant_name }}"
+  #     ether_type: ip
+  #     state: present
+  #   loop: "{{ tenants_dictionary }}"
 
-  - name: Add a new contract
-    cisco.aci.aci_contract:
-      tenant: "{{ item.tenant_name }}"
-      contract: "{{ item.contract_name }}"
-      description: "{{ item.contract_description }}"
-      state: present
-    loop: "{{ contracts_dictionary }}"
+  # - name: Add a new contract
+  #   cisco.aci.aci_contract:
+  #     tenant: "{{ item.tenant_name }}"
+  #     contract: "{{ item.contract_name }}"
+  #     description: "{{ item.contract_description }}"
+  #     state: present
+  #   loop: "{{ contracts_dictionary }}"
     
-  - name: Add a new contract subject
-    cisco.aci.aci_contract_subject:
-      tenant: "{{ item.tenant_name }}"
-      contract: "{{ item.contract_name }}"
-      subject: main_subject
-      description: main_subject
-      reverse_filter: false
-      state: present
-    loop: "{{ contracts_dictionary }}"
+  # - name: Add a new contract subject
+  #   cisco.aci.aci_contract_subject:
+  #     tenant: "{{ item.tenant_name }}"
+  #     contract: "{{ item.contract_name }}"
+  #     subject: main_subject
+  #     description: main_subject
+  #     reverse_filter: false
+  #     state: present
+  #   loop: "{{ contracts_dictionary }}"
 
 
 
@@ -119,3 +119,64 @@
 #     policy_type: combinable
 #     state: present
 #   delegate_to: localhost
+
+
+
+
+  # - name: Add a new L4-L7 device
+  #   cisco.aci.aci_l4l7_device:
+  #     tenant: "{{ item.tenant_name }}"
+  #     name: "{{ item.device_name }}"
+  #     service_type: "{{ item.service_type }}"
+  #     device_type: "{{ item.device_type }}"
+  #     domain: "{{ item.domain }}"
+  #     context_aware: "{{ item.context_aware }}"
+  #     state: present
+  #   loop: "{{ l4l7_device_dictionary }}"
+
+  # - name: Add a new concrete device
+  #   cisco.aci.aci_l4l7_concrete_device:
+  #     tenant: "{{ item.tenant_name }}"
+  #     device: "{{ item.device_name }}"
+  #     concrete_device: "{{ item.concrete_device_name }}"
+  #     state: present
+  #   loop: "{{ l4l7_concrete_device_dictionary }}"
+
+  # - name: Add a new concrete interface on a single port
+  #   cisco.aci.aci_l4l7_concrete_interface:
+  #     tenant: "{{ item.tenant_name }}"
+  #     device: "{{ item.device_name }}"
+  #     concrete_device: "{{ item.concrete_device_name }}"
+  #     name: "{{ item.concrete_interface_name }}"
+  #     pod_id: "{{ item.concrete_interface_pod_id }}"
+  #     node_id: "{{ item.concrete_interface_node_id }}"
+  #     interface: "{{ item.concrete_interface_id }}"
+  #     state: present
+  #   loop: "{{ l4l7_concrete_device_interfaces_dictionary }}"
+
+  # - name: Add a new logical interface
+  #   cisco.aci.aci_l4l7_logical_interface:
+  #     tenant: "{{ item.tenant_name }}"
+  #     device: "{{ item.device_name }}"
+  #     logical_interface: "{{ item.logical_interface_name }}"
+  #     encap: "{{ item.logical_interface_encap }}"
+  #     state: present
+  #   loop: "{{ l4l7_device_logical_interfaces_dictionary }}"
+
+  # - name: Add a new concrete interface attachment
+  #   cisco.aci.aci_l4l7_concrete_interface_attachment:
+  #     tenant: "{{ item.tenant_name }}"
+  #     device: "{{ item.device_name }}"
+  #     logical_interface: "{{ item.logical_interface_name }}"
+  #     concrete_device: "{{ item.concrete_device_name }}"
+  #     concrete_interface: "{{ item.concrete_interface_name }}"
+  #     state: present
+  #   loop: "{{ l4l7_device_concrete_logical_interface_attachment_dictionary }}"
+
+  - name: Add a new L4-L7 Service Graph Template
+    cisco.aci.aci_l4l7_service_graph_template:
+      tenant: "{{ item.tenant_name }}"
+      service_graph: "{{ item.service_graph_template_name }}"
+      # description: "{{ item.service_graph_template_description }}"
+      state: present
+    loop: "{{ l4l7_service_graph_template_dictionary }}"
