@@ -16,12 +16,12 @@
     - ./host_vars/vars.yml
 
   tasks:
-  # - name: Create Ansible Tenant
-  #   cisco.aci.aci_tenant:
-  #     tenant: "{{ item.tenant_name }}"
-  #     description: "{{ item.tenant_description }}"
-  #     state: present
-  #   loop: "{{ tenants_dictionary }}"
+  - name: Create Ansible Tenant
+    cisco.aci.aci_tenant:
+      tenant: "{{ item.tenant_name }}"
+      description: "{{ item.tenant_description }}"
+      state: present
+    loop: "{{ tenants_dictionary }}"
 
   # - name: Add a new VRF to a tenant
   #   cisco.aci.aci_vrf:
@@ -173,10 +173,23 @@
   #     state: present
   #   loop: "{{ l4l7_device_concrete_logical_interface_attachment_dictionary }}"
 
-  - name: Add a new L4-L7 Service Graph Template
-    cisco.aci.aci_l4l7_service_graph_template:
-      tenant: "{{ item.tenant_name }}"
-      service_graph: "{{ item.service_graph_template_name }}"
-      # description: "{{ item.service_graph_template_description }}"
-      state: present
-    loop: "{{ l4l7_service_graph_template_dictionary }}"
+  # - name: Add a new L4-L7 Service Graph Template
+  #   cisco.aci.aci_l4l7_service_graph_template:
+  #     tenant: "{{ item.tenant_name }}"
+  #     service_graph: "{{ item.service_graph_template_name }}"
+  #     state: present
+  #   loop: "{{ l4l7_service_graph_template_dictionary }}"
+
+
+  # - name: Add a new Service Graph Template Node
+  # cisco.aci.aci_l4l7_service_graph_template_node:
+  #   tenant: "{{ item.tenant_name }}"
+  #   service_graph: "{{ item.service_graph_template_name }}"
+  #   node: N1
+  #   functional_template_type: fw_routed
+  #   function_type: GoTo
+  #   device: "{{ item.device }}"
+  #   managed: false
+  #   routing_mode: redirect
+  #   state: present
+  #   loop: "{{ l4l7_service_graph_template_dictionary }}"

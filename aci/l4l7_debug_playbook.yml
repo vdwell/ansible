@@ -1,0 +1,172 @@
+---
+# Three Tier Application Playbook
+- name: Configuring a new Three Tier Application
+  hosts: apic1
+  connection: local
+  gather_facts: false
+  
+  module_defaults:
+    group/cisco.aci.all:
+      hostname: "{{ inventory_hostname }}"
+      username: "{{ username }}"
+      password: "{{ password }}"
+      validate_certs: false
+
+  vars_files:
+    - ./host_vars/vars.yml
+
+  tasks:
+
+  - name: Query a Service Graph Template Node
+    cisco.aci.aci_l4l7_service_graph_template_node:
+      tenant: tn_main_test
+      service_graph: sg_nlein01-fwacnpv001_acn-local
+      # node: test-node
+      state: query
+
+  # - name: Add a new L4-L7 device
+  #   cisco.aci.aci_l4l7_device:
+  #     tenant: "{{ item.tenant_name }}"
+  #     name: "{{ item.device_name }}"
+  #     service_type: "{{ item.service_type }}"
+  #     device_type: "{{ item.device_type }}"
+  #     domain: "{{ item.domain }}"
+  #     promiscuous_mode: false
+  #     context_aware: "{{ item.context_aware }}"
+  #     function_type: go_to
+  #     managed: false
+  #     state: present
+  #   loop: "{{ l4l7_device_dictionary }}"
+
+  # - name: Add a new concrete device
+  #   cisco.aci.aci_l4l7_concrete_device:
+  #     tenant: "{{ item.tenant_name }}"
+  #     device: "{{ item.device_name }}"
+  #     concrete_device: "{{ item.concrete_device_name }}"
+  #     state: present
+  #   loop: "{{ l4l7_concrete_device_dictionary }}"
+
+  # - name: Add a new concrete interface on a single port
+  #   cisco.aci.aci_l4l7_concrete_interface:
+  #     tenant: "{{ item.tenant_name }}"
+  #     device: "{{ item.device_name }}"
+  #     concrete_device: "{{ item.concrete_device_name }}"
+  #     name: "{{ item.concrete_interface_name }}"
+  #     pod_id: "{{ item.concrete_interface_pod_id }}"
+  #     node_id: "{{ item.concrete_interface_node_id }}"
+  #     interface: "{{ item.concrete_interface_id }}"
+  #     state: present
+  #   loop: "{{ l4l7_concrete_device_interfaces_dictionary }}"
+
+  # - name: Add a new logical interface
+  #   cisco.aci.aci_l4l7_logical_interface:
+  #     tenant: "{{ item.tenant_name }}"
+  #     device: "{{ item.device_name }}"
+  #     logical_interface: "{{ item.logical_interface_name }}"
+  #     encap: "{{ item.logical_interface_encap }}"
+  #     state: present
+  #   loop: "{{ l4l7_device_logical_interfaces_dictionary }}"
+
+  # - name: Add a new concrete interface attachment
+  #   cisco.aci.aci_l4l7_concrete_interface_attachment:
+  #     tenant: "{{ item.tenant_name }}"
+  #     device: "{{ item.device_name }}"
+  #     logical_interface: "{{ item.logical_interface_name }}"
+  #     concrete_device: "{{ item.concrete_device_name }}"
+  #     concrete_interface: "{{ item.concrete_interface_name }}"
+  #     state: present
+  #   loop: "{{ l4l7_device_concrete_logical_interface_attachment_dictionary }}"
+
+
+  # - name: Add a new L4-L7 Service Graph Template
+  #   cisco.aci.aci_l4l7_service_graph_template:
+  #     tenant: "{{ item.tenant_name }}"
+  #     service_graph: "{{ item.service_graph_template_name }}"
+  #     state: present
+  #   loop: "{{ l4l7_service_graph_template_dictionary }}"
+
+  # - name: Add a new Service Graph Template Node
+  #   cisco.aci.aci_l4l7_service_graph_template_node:
+  #     tenant: "{{ item.tenant_name }}"
+  #     service_graph: "{{ item.service_graph_template_name }}"
+  #     node: "{{ item.service_graph_template_node_name }}"
+  #     functional_template_type: "{{ item.service_graph_template_node_type }}"
+  #     function_type: "{{ item.service_graph_template_node_function_type }}"
+  #     device: "{{ item.device }}"
+  #     managed: false
+  #     routing_mode: "{{ item.service_graph_template_node_route_redirect }}"
+  #     state: present
+  #   loop: "{{ l4l7_service_graph_template_dictionary }}"
+
+  # - name: Add a new Term Node
+  #   cisco.aci.aci_l4l7_service_graph_template_term_node:
+  #     tenant: "{{ item.0.tenant_name }}"
+  #     service_graph: "{{ item.0.service_graph_template_name }}"
+  #     node_name: "{{ item.1.connected_terminal_node_name }}"
+  #     state: present
+  #   loop: "{{ l4l7_service_graph_template_dictionary | subelements('connections') }}"
+
+  # - name: Add a new Term Node
+  #   debug:
+  #     msg: " tenant is {{ item.0.tenant_name }}, sgt is {{ item.0.service_graph_template_name }}, node_name is {{ item.1.connected_terminal_node_name }}"
+  #   loop: "{{ l4l7_service_graph_template_dictionary | subelements('connections') }}"
+
+  # - name: Add a new AbsConnection connection
+  #   cisco.aci.aci_l4l7_service_graph_template_connection:
+  #     tenant: "{{ item.0.tenant_name }}"
+  #     service_graph: "{{ item.0.service_graph_template_name }}"
+  #     connection_name: "{{ item.1.connection_name }}"
+  #     adjacency_type: l3
+  #     connection_type: external
+  #     connector_direction: provider
+  #     direct_connect: false
+  #     unicast_route: true
+  #     state: present
+  #   loop: "{{ l4l7_service_graph_template_dictionary | subelements('connections') }}"
+
+
+  # - name: Add a new AbsConnectionConns connection
+  #   cisco.aci.aci_l4l7_service_graph_template_connection_to_connector:
+  #     tenant: tn_main_test
+  #     service_graph: test-graph
+  #     direction: provider
+  #     connection_name: C1
+  #     state: present
+  #   delegate_to: localhost
+
+
+  # - name: Add a new RsAbsConnectionConns connection (functional nodes)
+  #   cisco.aci.aci_l4l7_service_graph_template_connection_to_connector:
+  #     tenant: "{{ item.0.tenant_name }}"
+  #     service_graph: "{{ item.0.service_graph_template_name }}"
+  #     connection_name: "{{ item.1.connection_name }}"
+  #     connected_node: "{{ item.1.connected_node_name }}"
+  #     direction: "{{ item.1.connected_node_direction }}"
+  #     state: present
+  #   loop: "{{ l4l7_service_graph_template_dictionary | subelements('connections') }}"
+
+  # - name: Add a new RsAbsConnectionConns connection (terminal nodes)
+  #   cisco.aci.aci_l4l7_service_graph_template_connection_to_connector:
+  #     tenant: "{{ item.0.tenant_name }}"
+  #     service_graph: "{{ item.0.service_graph_template_name }}"
+  #     connection_name: "{{ item.1.connection_name }}"
+  #     connected_node: "{{ item.1.connected_terminal_node_name }}"
+  #     direction: "{{ item.1.connected_terminal_node_direction }}"
+  #     state: present
+  #   loop: "{{ l4l7_service_graph_template_dictionary | subelements('connections') }}"
+
+
+  # - name: Query a connection
+  #   cisco.aci.aci_l4l7_service_graph_template_connection_to_connector:
+  #     tenant: tn_main_test
+  #     service_graph: sg_nlein01-fwacnpv001_acn-local
+  #     direction: consumer
+  #     connection_name: C1
+  #     state: query
+
+  # - name: Query a Term Node
+  #   cisco.aci.aci_l4l7_service_graph_template_term_node:
+  #     tenant: tn_main_test
+  #     service_graph: sg_nlein01-fwacnpv001_acn-local
+  #     node_name: T1
+  #     state: query

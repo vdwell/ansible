@@ -57,12 +57,14 @@ contracts_dictionary:
     contract_description: Web EPG
     tenant_name: tn_main_test
 
+
+
 l4l7_device_dictionary:
   - device_name: l4l7_slr-tr0004_fwfg004_fwfg005
     tenant_name: tn_main_test
     service_type: fw
     device_type: physical
-    domain: phys
+    domain: SnV_phys
     context_aware: single
 
 l4l7_concrete_device_dictionary:
@@ -108,9 +110,24 @@ l4l7_device_concrete_logical_interface_attachment_dictionary:
     logical_interface_name: fwint_acn-local    
 
 
-# l4l7_service_graph_template_dictionary:
-#   - service_graph_template_name: sg_nlein01-fwacnpv001_acn-local
-#     tenant_name: tn_main_test
-    # service_graph_template_description: abc
 
+l4l7_service_graph_template_dictionary:
+  - service_graph_template_name: sg_nlein01-fwacnpv001_acn-local
+    tenant_name: tn_main_test
+    service_graph_template_node_name: N1
+    service_graph_template_node_type: fw_routed
+    service_graph_template_node_route_redirect: redirect
+    service_graph_template_node_function_type: go_to
+    device: l4l7_slr-tr0004_fwfg004_fwfg005
+    connections:
+      - connection_name: C1
+        connected_node_name: N1
+        connected_node_direction: provider
+        connected_terminal_node_name: T1
+        connected_terminal_node_direction: consumer
+      - connection_name: C2
+        connected_node_name: N1
+        connected_node_direction: consumer
+        connected_terminal_node_name: T2
+        connected_terminal_node_direction: provider
 
