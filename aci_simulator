@@ -1,0 +1,14 @@
+sudo apt install openconnect
+tmux new -A -s openconnect
+sudo openconnect devnetsandbox-usw1-reservation.cisco.com:20306 
+tmux a -t openconnect
+
+
+sudo apt update
+sudo apt install firefox
+export DISPLAY=:0
+firefox &
+
+
+source venv/bin/activate
+ansible-playbook -i hosts.yml tenant_scope_general_playbook.yml -vvvv
