@@ -1,0 +1,6 @@
+ansible-playbook playbook.yml --extra-vars "myName=nginx"
+ansible-playbook playbook.yml --extra-vars "x=hi y=bye"
+ansible-playbook playbook.yml -e "x=hi y=bye"
+ansible-playbook playbook.yml -e '{"x": "hi", "y": "bye"}'
+ansible-playbook playbook.yml -e '{"x": 5, "y": 9}'
+ansible-playbook playbook.yml -e '{"x": [4,5,6], "y": {'a': 'first', 'b': 'second'}}'
