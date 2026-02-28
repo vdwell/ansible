@@ -1,0 +1,29 @@
+playbook.yml
+---
+- name: do smth
+  hosts: localhost
+  vars_files: aws_keys.yml
+  tasks:
+    - name: do smth
+      amazon.aws.ec2_instance:
+        aws_access_key: "{{aws_access_key}}"
+        aws_access_key: "{{aws_secret_key}}"
+
+
+aws_keys.yml
+---
+aws_access_key: sfdsdfs
+aws_secret_key: sdgfsfasdfsf
+
+
+
+
+ansible-vault encrypt aws_keys.yml
+
+ansible-playbook playbook.yml --ask-vault-password
+
+ansible-vault --help
+ansible-vault edit aws_key.yml
+ansible-vault rekey aws_key.yml
+ansible-vault decrypt aws_keys.yml
+anslbe-vault create new_aws_keys.yml
