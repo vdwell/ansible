@@ -1,0 +1,73 @@
+
+usageofRegisterVariable.yml
+---
+- hosts: localhost
+ gather_facts: false
+ tasks:
+  - ansible.buildtin.command: "uname"
+    register: unameOutput
+  - ansible.builtin.debug:
+    msg: "uname Result: {{unameOutput}}"
+
+ansible-playbook usageofRegisterVariable.yml
+
+
+
+usageofRegisterVariable.yml
+---
+- hosts: localhost
+ gather_facts: false
+ tasks:
+  - ansible.buildtin.command: "uname"
+    register: unameOutput
+  - ansible.builtin.debug:
+    var: unameOutput
+
+ansible-playbook usageofRegisterVariable.yml
+
+
+usageofRegisterVariable.yml
+---
+- hosts: localhost
+ gather_facts: false
+ tasks:
+  - ansible.buildtin.command: "uname"
+    register: unameOutput
+  - ansible.builtin.debug:
+    var: unameOutput.stdout
+
+ansible-playbook usageofRegisterVariable.yml
+
+
+
+usageofRegisterVariable.yml
+---
+- hosts: localhost
+ gather_facts: false
+ tasks:
+  - ansible.buildtin.command: "uname"
+    register: unameOutput
+  - ansible.builtin.debug:
+    var: unameOutput.stdout
+
+
+findPythonVersion.yml
+
+---
+- name: playbook to get python version
+  hosts: localhost
+  gather_facts: false
+  tasks:
+    - name: executing python version command with command module
+      ansible.builtin.command:
+        cmd: 'python --version'
+      register: pythonVersion
+    - name: Displaying python version using debug module
+      ansible.builtin.debug:
+        msg: "{{pythonVersion.get('stdout')}}"
+        msg: "{{pythonVersion.stdout}}"
+
+
+
+
+
