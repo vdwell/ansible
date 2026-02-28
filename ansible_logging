@@ -1,0 +1,4 @@
+ansible.cfg
+[defaults]
+inventory=./inventory
+log_path = /home/.../logs/ansible.log
